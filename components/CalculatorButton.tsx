@@ -3,23 +3,35 @@ import React from "react";
 import { globalStyles } from "@/styles/global-styles";
 import { Colors } from "@/constants/Colors";
 
+import * as Haptics from 'expo-haptics';
+
 interface Props {
   label: string;
   color?: string;
   textBlack?: boolean;
+  doubleSize?: boolean;
   onPress: ()=>void;
 }
 
 const CalculatorButton = ({ 
   label = 'X', 
-  color = Colors.textPrimary, 
+  color = Colors.darkGray, 
   textBlack = false, 
+  doubleSize = false, 
   onPress 
 } : Props) => {
   return (
     <Pressable 
-    onPress={onPress}
-    style={globalStyles.button}
+    onPress={()=>{
+      Haptics.selectionAsync()
+      onPress()
+    }}
+    style={({pressed})=>({
+      ...globalStyles.button,
+      backgroundColor: color,
+      opacity: pressed ? 0.8 : 1,
+      width: doubleSize ? 180 : 80
+    })}
     >
       <Text style={{
         ...globalStyles.buttonText,
